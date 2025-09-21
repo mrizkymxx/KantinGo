@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - KantinGo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/phosphor-icons"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f8fafc; /* slate-50 */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; /* slate-300 */
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; /* slate-400 */
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800">
+
+    <div class="max-w-md mx-auto bg-slate-50 min-h-screen shadow-2xl flex flex-col">
+
+        <!-- ===== Login Page ===== -->
+        <div id="login-page" class="p-8 flex flex-col justify-center min-h-screen bg-white">
+            <div class="text-center mb-8">
+                <i class="ph-fork-and-knife text-6xl text-teal-500"></i>
+                <h1 class="text-4xl font-bold text-slate-900 mt-4">KantinGo</h1>
+                <p class="text-slate-500 mt-2">Silakan masuk untuk melanjutkan.</p>
+            </div>
+
+            <form id="login-form" class="w-full space-y-4">
+                <div>
+                    <label for="role" class="block text-sm font-medium text-slate-700 mb-1">Masuk sebagai</label>
+                    <select id="role" name="role" class="w-full p-3 bg-slate-100 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500">
+                        <option value="mahasiswa">Mahasiswa</option>
+                        <option value="penjual">Penjual Kantin</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="user-id" class="block text-sm font-medium text-slate-700 mb-1">ID Pengguna</label>
+                    <input type="text" id="user-id" name="user-id" class="w-full p-3 bg-slate-100 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500" placeholder="Masukkan ID Anda">
+                </div>
+                 <div>
+                    <label for="password" class="block text-sm font-medium text-slate-700 mb-1">Kata Sandi</label>
+                    <input type="password" id="password" name="password" class="w-full p-3 bg-slate-100 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500" placeholder="Masukkan kata sandi">
+                </div>
+                <p id="login-error" class="text-red-500 text-sm hidden">ID atau Kata Sandi salah.</p>
+                <button type="submit" class="w-full bg-teal-500 text-white py-3.5 rounded-xl font-semibold hover:bg-teal-600 active:bg-teal-700 transition duration-300 shadow-lg shadow-teal-500/30">
+                    Masuk
+                </button>
+            </form>
+
+            <div class="mt-6 text-xs text-slate-400 bg-slate-100 p-3 rounded-lg">
+                <p class="font-bold mb-1">Akun untuk Demo:</p>
+                <div id="demo-accounts"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const mockUsers = {
+            mahasiswa: [
+                { id: '231250000522', password: 'password123', name: 'M. Rizky (Anda)' },
+                { id: 'mahasiswa2', password: 'password', name: 'Rina' }
+            ],
+            penjual: [
+                { id: 'buani', password: 'password123', name: 'Kantin Bu Ani', tenantId: 't1' },
+                { id: 'pakudin', password: 'password', name: 'Mie Ayam Bang Udin', tenantId: 't4' }
+            ]
+        };
+
+        // ===== LOGIN & LOGOUT =====
+        function handleLogin(event) {
+            event.preventDefault();
+            const role = document.getElementById('role').value;
+            const userId = document.getElementById('user-id').value;
+            const password = document.getElementById('password').value;
+            const errorElement = document.getElementById('login-error');
+
+            const userList = mockUsers[role];
+            const foundUser = userList.find(user => user.id === userId && user.password === password);
+
+            if (foundUser) {
+                const loggedInUser = { ...foundUser, role: role };
+                localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
+                errorElement.classList.add('hidden');
+                // Redirect to index.html
+                window.location.href = 'index.html';
+            } else {
+                errorElement.classList.remove('hidden');
+            }
+        }
+
+        function populateDemoAccounts() {
+            const container = document.getElementById('demo-accounts');
+            let html = '<p><b>Mahasiswa:</b><br>';
+            mockUsers.mahasiswa.forEach(u => {
+                html += `ID: <code>${u.id}</code>, Pass: <code>${u.password}</code><br>`;
+            });
+            html += '</p><p class="mt-1"><b>Penjual:</b><br>';
+            mockUsers.penjual.forEach(u => {
+                html += `ID: <code>${u.id}</code>, Pass: <code>${u.password}</code><br>`;
+            });
+            html += '</p>';
+            container.innerHTML = html;
+        }
+
+        // ===== INITIALIZATION =====
+        window.onload = () => {
+            document.getElementById('login-form').addEventListener('submit', handleLogin);
+            populateDemoAccounts();
+        };
+    </script>
+</body>
+</html>
