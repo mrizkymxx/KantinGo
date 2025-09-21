@@ -105,5 +105,4 @@ Proyek ini dibuat oleh Muhammad Rizky untuk tujuan edukasi dan demonstrasi.
 
 ---
 
-⭐ Jika suka proyek ini, beri star di GitHub!</content>
-<parameter name="filePath">d:\project\KantinGo\README.md
+⭐ Jika suka proyek ini, beri star di GitHub!
